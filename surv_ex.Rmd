@@ -1,0 +1,85 @@
+---
+title: "Example survival plots"
+description: |
+  Looking at different options to produce survival (time to event) plot including survminer, ggfortify and broom.
+author:
+  - name: Mark Baillie 
+    url: https://bailliem.github.io/visR-gists/
+    affiliation: visR
+    affiliation_url: https://github.com/openpharma/visR
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE, results=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+
+library(rmarkdown)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(here)
+library(patchwork)
+library(survminer)
+library(ggfortify)
+library(survival)
+library(broom)
+
+#theme_set(theme_minimal(base_size = 8))
+theme_set(theme_linedraw(base_size = 8))
+
+```
+
+
+# Purpose
+
+To explore different options to produce a survival plot. 
+
+# Example 
+
+A typical example survival model with a binary stratum. 
+
+```{r}
+fit <- survfit(Surv(time, status) ~ sex, data = lung)
+fit
+```
+
+
+# Survminer
+
+Plot survival curves by strata using survminer. 
+
+```{r}
+ggsurvplot(fit, data = lung)
+```
+
+## GGfortify
+
+
+```{r}
+autoplot(fit)
+```
+
+## Broom 
+
+First tidy the survival object. 
+
+```{r}
+td <- tidy(fit)
+td %>% glimpse()
+```
+
+Then plot with ggplot. 
+
+```{r}
+td %>% 
+  ggplot(aes(time, estimate, group = strata)) + 
+  geom_line() +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = .2)
+```
+
+
+# Further reading
+
+https://socviz.co/modeling.html
