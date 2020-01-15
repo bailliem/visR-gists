@@ -7,6 +7,8 @@ See http://hbiostat.org/R/hreport/report.html for inspiration.
 
 Epi and IDA https://rpubs.com/alecri/258589
 
+https://socviz.co/index.html#preface
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 

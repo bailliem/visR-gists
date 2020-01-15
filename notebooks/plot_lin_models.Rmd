@@ -12,6 +12,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 ```
 
+https://grantmcdermott.com/2019/12/16/interaction-effects/
+
+coefficient plots 
+https://gist.github.com/grantmcdermott/d86af2b8f21f4082595c0e717eea5a90
+
 
 ```{r setupR, results=FALSE, warning=FALSE}
 library(rmarkdown)

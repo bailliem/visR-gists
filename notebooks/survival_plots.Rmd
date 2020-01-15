@@ -12,6 +12,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 ```
 
+https://socviz.co/modeling.html
+
 
 ```{r setupR, results=FALSE, warning=FALSE}
 library(rmarkdown)

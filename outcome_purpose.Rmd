@@ -1,0 +1,28 @@
+---
+title: "Outcome and purpose"
+description: |
+  List of notes on the outcome and purpose of the package and each graph example.
+author:
+  - name: Mark Baillie 
+    url: https://bailliem.github.io/visR-gists/
+    affiliation: visR
+    affiliation_url: https://github.com/openpharma/visR
+date: "`r Sys.Date()`"
+output: distill::distill_article
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Outcome
+
+A plot with all the relevant features fit for purpose for:
+
+* the audience
+* the medium / presentation purpose
+* the neecds of the audience
+* designed to hit the target, the purpose of whatever and whoever it is being presented to. 
+
+# Purpose
+

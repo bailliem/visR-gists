@@ -40,7 +40,7 @@ Broom.mixed and ggplot
 
 See https://cran.r-project.org/web/packages/broom.mixed/index.html
 See https://socviz.co/modeling.html
-
+https://cran.r-project.org/web/packages/dotwhisker/vignettes/dotwhisker-vignette.html
 
 https://cran.r-project.org/web/packages/broom.mixed/vignettes/broom_mixed_intro.html
 

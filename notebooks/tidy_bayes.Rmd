@@ -1,7 +1,7 @@
 
 
 ---
-title: "Forest plot"
+title: "Look at Bayesplot"
 date: "`r Sys.Date()`"
 output:
     bookdown::html_document2:
@@ -16,21 +16,25 @@ knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 
 
 ```{r setupR, results=FALSE, warning=FALSE}
-library(rmarkdown)
-library(ggplot2)
+library(magrittr)
 library(dplyr)
-library(tidyr)
-library(readr)
-library(here)
-library(patchwork)
-library(survminer)
-library(ggfortify)
-library(glmnet)
+library(forcats)
+library(ggplot2)
+library(ggstance)
+library(emmeans)
 library(broom)
-library(broom.mixed)
+library(rstan)
+library(rstanarm)
+library(brms)
+library(modelr)
+library(bayesplot)
+library(MCMCglmm)
+library(tidybayes)
+library(cowplot)
+library(RColorBrewer)
+library(gganimate)
 
-theme_set(theme_minimal(base_size = 8))
-#theme_set(theme_linedraw(base_size = 8))
+theme_set(theme_tidybayes() + panel_border())
 ```
 
 
@@ -38,3 +42,96 @@ theme_set(theme_minimal(base_size = 8))
 Look at tidybayes
 
 https://mjskay.github.io/tidybayes/articles/tidybayes.html
+
+
+
+```{r}
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+```
+
+```{r}
+set.seed(5)
+n = 10
+n_condition = 5
+ABC =
+  tibble(
+    condition = rep(c("A","B","C","D","E"), n),
+    response = rnorm(n * 5, c(0,1,2,1,-1), 0.5)
+  )
+```
+
+```{r}
+ABC %>%
+  ggplot(aes(x = response, y = fct_rev(condition))) +
+  geom_point(alpha = 0.5) +
+  ylab("condition")
+```
+
+```{stan output.var=}
+data {
+  int<lower=1> n;
+  int<lower=1> n_condition;
+  int<lower=1, upper=n_condition> condition[n];
+  real response[n];
+}
+parameters {
+  real overall_mean;
+  vector[n_condition] condition_zoffset;
+  real<lower=0> response_sd;
+  real<lower=0> condition_mean_sd;
+}
+transformed parameters {
+  vector[n_condition] condition_mean;
+  condition_mean = overall_mean + condition_zoffset * condition_mean_sd;
+}
+model {
+  response_sd ~ cauchy(0, 1);         // => half-cauchy(0, 1)
+  condition_mean_sd ~ cauchy(0, 1);   // => half-cauchy(0, 1)
+  overall_mean ~ normal(0, 5);
+  condition_zoffset ~ normal(0, 1);   // => condition_mean ~ normal(overall_mean, condition_mean_sd)
+  for (i in 1:n) {
+    response[i] ~ normal(condition_mean[condition[i]], response_sd);
+  }
+}
+```
+
+
+
+```{r}
+compose_data(ABC)
+```
+
+
+```{r}
+m = sampling(ABC_stan, data = compose_data(ABC), control = list(adapt_delta=0.99))
+```
+
+
+```{r}
+print(m, pars = c("overall_mean", "condition_mean_sd", "condition_mean", "response_sd"))
+```
+
+
+```{r}
+str(rstan::extract(m))
+```
+
+
+```{r}
+m %>%
+  spread_draws(condition_mean[condition]) %>%
+  head(10)
+```
+
+```{r}
+m %>%
+  recover_types(ABC) %>%
+  spread_draws(condition_mean[condition]) %>%
+  head(10)
+```
+
+```{r}
+m %<>% recover_types(ABC)
+```
+
