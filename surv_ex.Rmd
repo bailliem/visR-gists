@@ -171,6 +171,7 @@ surv_tab <-
   ) %>%
   ggplot(aes(x = Time, y = row , label = Nrisk)) + 
   geom_text() 
+  
 
 surv_tab
 ```
