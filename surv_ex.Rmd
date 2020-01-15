@@ -122,22 +122,29 @@ surv_plot / surv_tab
 ```
 
 How to recreate the risk table in surv_miner. 
+
+Need to:
+
+* within strata
+* go through the sequence of time points to plot
+* find last time point relative to each break
+* round up if not exactly measured at that time point i.e. time = 8 becomes 10
+
+
 ```{r}
-td %>% 
-  group_by()
-  
-  
-  mutate(
-    row = if_else(strata == "sex=1", 1, 0)  
-  ) %>%
-  ggplot(aes(x = time, y = row , label = n.risk)) + 
-  geom_text() 
 
+td
 
-tmp %>%
-group_by(id) %>%
-slice(c(1, n())) %>%
-ungroup()
+# this is the sequence
+breaks <- c(0, 200, 400, 600, 800, 1000, 1200)
+
+# filtering on the sequence
+td %>%
+  group_by(strata) %>%
+  arrange(time) %>%
+  filter(time < breaks) %>%
+  slice(n()) %>%
+  ungroup()
 ```
 
 
