@@ -8,7 +8,9 @@ author:
     affiliation: visR
     affiliation_url: https://github.com/openpharma/visR
 date: "`r Sys.Date()`"
-output: distill::distill_article
+output: 
+  distill::distill_article:
+  toc: true
 ---
 
 ```{r setup, include=FALSE, results=FALSE, warning=FALSE}
@@ -145,6 +147,99 @@ td %>%
   filter(time < breaks) %>%
   slice(n()) %>%
   ungroup()
+```
+
+```{r}
+sumfit <- sumfit <- summary(fit, times=c(0, 250, 500, 750, 1000, 1250))
+n_risk <- data_frame('Arm' = sumfit$strata,
+                     'Time' =  sumfit$time,
+                     'Nrisk' =   sumfit$n.risk)
+
+labels <- data_frame ('Arm' = "Time",
+                      'Time' =  sumfit$time,
+                      'Nrisk' =   sumfit$time)
+
+
+n_risk
+```
+
+```{r}
+surv_tab <-
+  n_risk %>% 
+  mutate(
+    row = factor(if_else(Arm == "sex=1", 1, 0))  
+  ) %>%
+  ggplot(aes(x = Time, y = row , label = Nrisk)) + 
+  geom_text() 
+
+surv_tab
+```
+
+```{r}
+surv_plot / surv_tab
+```
+
+
+
+## No confidence intervals 
+
+```{r}
+td %>% 
+  ggplot(aes(time, estimate, group = strata, colour = strata)) + 
+  geom_line() 
+
+```
+
+## Confidence interval
+
+```{r}
+td %>% 
+  ggplot(aes(time, estimate, group = strata)) + 
+  geom_line() +
+  geom_linerange(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2) 
+
+```
+
+## Faceted
+
+```{r}
+td %>% 
+  ggplot(aes(time, estimate, group = strata)) + 
+  geom_line() +
+  geom_linerange(aes(ymin = conf.low, ymax = conf.high), alpha = 0.2) +
+  facet_wrap( ~ strata)
+
+```
+
+## With censoring
+
+
+```{r}
+td %>% 
+  ggplot(aes(time, estimate, group = strata)) + 
+  geom_line() +
+  geom_point(data = td %>% filter(n.censor > 0), aes(time, estimate), alpha = 0.5)
+
+```
+
+
+## With annotations 
+
+
+```{r}
+library(ggrepel)
+td %>% 
+  ggplot(aes(time, estimate, group = strata)) + 
+  geom_line() +
+  geom_text_repel(data = td %>% group_by(strata) %>% slice(n()),
+    aes(label = strata),
+    size = 4.5,
+    point.padding = .2,
+    box.padding = .3,
+    force = 1,
+    min.segment.length = 0
+  )
+
 ```
 
 
