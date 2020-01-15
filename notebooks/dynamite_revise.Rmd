@@ -1,0 +1,263 @@
+---
+title: "Revising a dynamite plot"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(dplyr)
+library(patchwork)
+
+
+```
+
+Have a clear purpose (worksheet)
+Identify a project you are working on where you need to communicate in a data-driven way. Reflect upon and fill out the following.
+What is the purpose of the project?
+•  What is the main objective of the project?
+•  List the (scientific) question(s) the project is trying to answer. Try to be specific.
+•  What is the key evidence that is available to answer the question?
+Who is your audience?
+•  List the primary groups or individuals you will be communicating to.
+•  If you had to narrow that to a single person, who would that be?
+•  What does your audience care about?
+•  What action does your audience need to take?
+What is the importance of this project?
+•  What are the benefits if your audience acts in the way that you want them to?
+•  What are the risks if they do not?
+What is the key message (the so what?)
+•  Write out in a single sentence the key message.
+
+
+```{r}
+```
+
+
+```{r}
+set.seed(1971)
+
+N <- 100
+trt <- rep(c(0, 1), each=N/2)
+aval <- rnorm(n = N, mean = 30 + trt * 1, sd = 5 + trt * 0.5)
+
+dat <- tibble::tibble(trt = trt,
+              aval = aval)
+
+
+```
+
+```{r}
+mm1 <- function(...) {
+  mean_cl_normal(...,mult=1)
+}
+mm2 <- function(...) {
+  mean_cl_normal(...,mult=2)
+}
+```
+
+
+```{r}
+dat %>%
+  ggplot(aes(x=factor(trt),y=aval))+
+  stat_summary(fun.data=mean_cl_normal,geom="errorbar",width=0.5) +
+  stat_summary(fun.data=mean_cl_normal,geom="bar") 
+```
+
+```{r}
+g1 <-
+  dat %>%
+  ggplot(aes(x = factor(trt), y = aval)) +
+  stat_summary(
+    fun.data = mean_sdl,
+    fun.args = list(mult = 1),
+    geom = "errorbar",
+    width = 0.5
+  ) +
+  stat_summary(fun.y = mean, geom = "bar") 
+```
+
+
+```{r}
+g2 <-
+  dat %>%
+  ggplot(aes(x = factor(trt), y = aval)) +
+  stat_summary(
+    fun.data = mean_sdl,
+    fun.args = list(mult = 1),
+    geom = "errorbar",
+    width = 0.5
+  ) +
+  stat_summary(fun.y = mean, geom = "bar") +
+  theme(
+    legend.position = "none",
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank()
+  ) 
+
+```
+
+```{r}
+
+g3 <- 
+  dat %>%
+  ggplot(aes(x = factor(trt), y = aval)) +
+  stat_summary(
+    fun.data = mean_sdl,
+    fun.args = list(mult = 1),
+    geom = "errorbar",
+    width = 0.5
+  ) +
+  stat_summary(fun.y = mean, geom = "bar") +
+  theme_minimal(base_size = 14)+
+  theme(legend.position="none",
+        panel.grid.minor=element_blank(),
+        panel.grid.major=element_line(size = 0.5, color = "gray96"),
+        panel.background=element_blank(),
+        axis.title.y=element_blank(),
+        axis.title.x=element_blank()
+  )
+
+```
+
+
+
+```{r}
+g4 <- 
+  dat %>%
+  ggplot(aes(x = factor(trt), y = aval)) +
+  stat_summary(
+    fun.data = mean_sdl,
+    fun.args = list(mult = 1),
+    geom = "errorbar",
+    width = 0.5
+  ) +
+  stat_summary(fun.y = mean, geom = "bar") +
+  xlab("Treatment") + ylab("Effect") + 
+  theme_minimal(base_size = 14) +
+  theme(legend.position="none",
+        panel.grid.minor=element_blank(),
+        panel.grid.major=element_line(size = 0.5, color = "gray96"),
+        panel.background=element_blank()
+  ) 
+
+```
+
+
+
+```{r}
+g5 <-
+  dat %>%
+  ggplot(aes(x = factor(trt), y = aval)) +
+  stat_summary(
+    fun.data = mean_sdl,
+    fun.args = list(mult = 1),
+    geom = "linerange",
+    size = 0.7
+  ) +
+  stat_summary(fun.y = mean, geom = "point") +
+  xlab("Treatment") + ylab("Effect") +
+  theme(
+    legend.position = "none",
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(size = 0.5, color = "gray96"),
+    panel.background = element_blank()
+  )
+```
+
+
+```{r}
+g6 <-
+  dat %>%
+  ggplot(aes(x = factor(trt), y = aval)) +
+  stat_summary(
+    fun.data = mean_sdl,
+    fun.args = list(mult = 1),
+    geom = "linerange",
+    size = 1.1,
+    color = "red",
+    position = position_dodge(width = 0)
+  ) +
+  stat_summary(
+    fun.data = mean_sdl,
+    fun.args = list(mult = 2),
+    geom = "linerange",
+    size = 0.7
+  ) +
+  stat_summary(fun.y = mean, geom = "point") +
+  xlab("Treatment") + ylab("Effect") +
+  theme(
+    legend.position = "none",
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(size = 0.5, color = "gray96"),
+    panel.background = element_blank()
+  )
+```
+
+
+
+```{r}
+(g1 + g2 + g3) / (g4 + g5 + g6)
+```
+```{r}
+
+dat %>%
+  ggplot(aes(x = factor(trt), y = aval)) +
+  stat_summary(
+    fun.data = mean_sdl,
+    fun.args = list(mult = 1),
+    geom = "linerange",
+    size = 1.5,
+    color = "red",
+    position = position_dodge(width = 0)
+  ) +
+  stat_summary(
+    fun.data = mean_sdl,
+    fun.args = list(mult = 2),
+    geom = "linerange",
+    size = 0.7
+  ) +
+  geom_jitter(aes(colour = factor(trt)), width = 0.1, alpha = 0.4) +
+  xlab("Treatment") + ylab("Effect") +
+  theme(
+    legend.position = "none",
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(size = 0.5, color = "gray96"),
+    panel.background = element_blank()
+  )
+```
+
+
+
+```{r}
+
+dat %>%
+  ggplot(aes(x = factor(trt), y = aval)) +
+  stat_summary(
+    fun.data = mean_sdl,
+    fun.args = list(mult = 1),
+    geom = "linerange",
+    size = 1.1,
+    color = "red",
+    position = position_dodge(width = 0)
+  ) +
+  stat_summary(
+    fun.data = mean_sdl,
+    fun.args = list(mult = 2),
+    geom = "linerange",
+    size = 0.7
+  ) +
+  geom_point(aes(colour = factor(trt)), alpha = 0.4) +
+  xlab("Treatment") + ylab("Effect") +
+  theme(
+    legend.position = "none",
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(size = 0.5, color = "gray96"),
+    panel.background = element_blank()
+  )
+```
+
+

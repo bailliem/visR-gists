@@ -1,0 +1,17 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## to read 
+https://www.littlemissdata.com/blog/prettytables
+https://www.littlemissdata.com/blog/simple-eda
+
+gt working on plots in a cell in a tiblle 
+https://github.com/rstudio/gt/issues/152
+
+
+FORMATTABLE

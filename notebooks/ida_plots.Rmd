@@ -1,0 +1,132 @@
+---
+title: "Example initial data analysis plots"
+output: html_document
+---
+
+See http://hbiostat.org/R/hreport/report.html for inspiration. 
+
+Epi and IDA https://rpubs.com/alecri/258589
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(patchwork)
+
+## RHO RCT data
+adsl_path <- "https://raw.githubusercontent.com/RhoInc/data-library/master/data/clinical-trials/adam/adsl.csv"
+advs_path <- "https://raw.githubusercontent.com/RhoInc/data-library/master/data/clinical-trials/adam/advs.csv"
+```
+
+## Purpose
+
+
+
+
+
+```{r}
+
+adsl <- read_csv(adsl_path)
+glimpse(adsl)
+
+```
+
+```{r}
+advs <- read_csv(advs_path)
+glimpse(advs)
+```
+
+
+## Univartiate summary of discrete data
+
+
+Try to recreate the baseline plot here 
+
+```{r}
+bigN <- adsl %>%
+  filter(SAFFL == "Y") %>%
+  nrow()
+
+
+plot_data <-
+  adsl %>%
+  filter(SAFFL == "Y") %>%
+  select(USUBJID, SEX, RACE, ARM) %>%
+  pivot_longer(-c("USUBJID","ARM"), names_to = "param", values_to = "value") %>%
+  group_by(ARM, param, value) %>%
+  summarise(n = n()) %>%
+  mutate(
+    prop = n / bigN,
+    perc = n / bigN * 100
+  ) 
+  
+```
+
+
+```{r}
+adsl %>%
+  group_by(ARM) %>%
+  summarise(n = n()) %>%
+  mutate(freq = n / sum(n))
+```
+
+
+
+```{r}
+plot_data %>% 
+  ggplot(aes(value, prop)) +
+  geom_col(width = 0.6,
+           alpha = 0.15,
+           fill = "black") +
+  geom_point() +
+  coord_flip() +
+  facet_wrap(~ ARM) + 
+  ggtitle("Proportion of patients by treatment and subgroup") +
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_blank(),
+    axis.title = element_blank()
+  )
+```
+
+
+## Univariate summary of continuous data 
+
+Spike histogram of univariate display. 
+
+Plot distribution of counts. 
+
+```{r}
+plot_data %>%
+  ggplot(aes(AGE)) +
+  geom_histogram(binwidth = 0.1) +  ## need to select binwidth dynamically 
+  theme_minimal()
+
+```
+
+Plot densities rather than counts. 
+
+
+
+Plot by facet.
+
+
+```{r}
+advs %>%
+  select(USUBJID, AGE, SEX, RACE, ARM, PARAM, AVAL) %>%
+  filter(PARAM == "Diastolic Blood Pressure (mmHg)") %>%
+  ggplot(aes(AGE, y=..density..)) +
+  geom_histogram(binwidth = 0.1) +  ## need to select binwidth dynamically 
+  theme_minimal() + 
+  facet_wrap( ~ SEX, ncol = 1)
+
+```
+
+
+## toread
+https://www.littlemissdata.com/blog/simple-eda
+http://hbiostat.org/R/hreport/report.html#
+http://hbiostat.org/R/hreport/test.html

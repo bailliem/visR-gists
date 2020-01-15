@@ -1,0 +1,47 @@
+
+---
+title: "Forest plot"
+date: "`r Sys.Date()`"
+output:
+    bookdown::html_document2:
+        toc: true
+        toc_float:
+            collapsed: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+
+```{r setupR, results=FALSE, warning=FALSE}
+library(rmarkdown)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(here)
+library(patchwork)
+library(survminer)
+library(ggfortify)
+library(glmnet)
+library(broom)
+
+theme_set(theme_minimal(base_size = 8))
+#theme_set(theme_linedraw(base_size = 8))
+```
+
+
+# Purpose
+
+Broom and ggplot
+
+See https://socviz.co/modeling.html
+
+
+```{r}
+
+```
+
+
+
