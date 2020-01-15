@@ -54,6 +54,27 @@ Plot survival curves by strata using survminer.
 ggsurvplot(fit, data = lung)
 ```
 
+
+```{r}
+ggsurvplot(
+   fit,                     # survfit object with calculated statistics.
+   data = lung,  # data used to fit survival curves. 
+   risk.table = TRUE,         # show risk table.
+   pval = TRUE,               # show p-value of log-rank test.
+   conf.int = TRUE,           # show confidence intervals for 
+                              # point estimaes of survival curves.
+   xlim = c(0,1000),          # present narrower X axis, but not affect
+                              # survival estimates.
+   break.time.by = 500,       # break X axis in time intervals by 500.
+   ggtheme = theme_minimal(), # customize plot and risk table with a theme.
+   risk.table.y.text.col = T, # colour risk table text annotations.
+   risk.table.y.text = FALSE # show bars instead of names in text annotations
+                             # in legend of risk table
+)
+```
+
+
+
 ## GGfortify
 
 
@@ -73,10 +94,50 @@ td %>% glimpse()
 Then plot with ggplot. 
 
 ```{r}
-td %>% 
+surv_plot <- td %>% 
   ggplot(aes(time, estimate, group = strata)) + 
   geom_line() +
   geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = .2)
+
+surv_plot
+```
+
+
+Plot risk table 
+
+```{r}
+surv_tab <-
+  td %>% 
+  mutate(
+    row = if_else(strata == "sex=1", 1, 0)  
+  ) %>%
+  ggplot(aes(x = time, y = row , label = n.risk)) + 
+  geom_text() 
+
+surv_tab
+```
+
+```{r}
+surv_plot / surv_tab
+```
+
+How to recreate the risk table in surv_miner. 
+```{r}
+td %>% 
+  group_by()
+  
+  
+  mutate(
+    row = if_else(strata == "sex=1", 1, 0)  
+  ) %>%
+  ggplot(aes(x = time, y = row , label = n.risk)) + 
+  geom_text() 
+
+
+tmp %>%
+group_by(id) %>%
+slice(c(1, n())) %>%
+ungroup()
 ```
 
 
