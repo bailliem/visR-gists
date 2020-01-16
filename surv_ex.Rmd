@@ -10,7 +10,8 @@ author:
 date: "`r Sys.Date()`"
 output: 
   distill::distill_article:
-  toc: true
+    self_contained: FALSE
+    toc: TRUE
 ---
 
 ```{r setup, include=FALSE, results=FALSE, warning=FALSE}
@@ -250,6 +251,51 @@ td %>%
   )
 
 ```
+
+
+
+
+
+
+# Audience and asthetics
+
+Same plot with different looks. 
+
+## Explore
+
+```{r}
+td %>% 
+  ggplot(aes(time, estimate, group = strata, colour = strata)) + 
+  geom_line() +
+  geom_point() +
+  theme_linedraw()
+```
+
+## Report 
+
+```{r}
+
+n_risk <- 
+  n_risk %>% 
+  mutate(row = if_else(Arm == "sex=1", -0.05, -0.10)) 
+            
+
+td %>% 
+  ggplot(aes(time, estimate, group = strata)) + 
+  geom_line() +
+  geom_point(data = td %>% filter(n.censor > 0), aes(time, estimate), alpha = 0.5) +
+  geom_text(data = n_risk, aes(x = Time, y = row, label = Nrisk, group = Arm)) +
+  theme_minimal()
+```
+
+
+## Presentation
+
+## Publication
+
+## Shiny / interactive 
+
+Annotations and tooltips using plotly?
 
 
 # Competing risks
