@@ -150,7 +150,8 @@ td %>%
 ```
 
 ```{r}
-sumfit <- sumfit <- summary(fit, times=c(0, 250, 500, 750, 1000, 1250))
+sumfit <- summary(fit, times=c(0, 250, 500, 750, 1000, 1250)) 
+
 n_risk <- data_frame('Arm' = sumfit$strata,
                      'Time' =  sumfit$time,
                      'Nrisk' =   sumfit$n.risk)
@@ -162,6 +163,13 @@ labels <- data_frame ('Arm' = "Time",
 
 n_risk
 ```
+
+```{r}
+fit
+summary(fit, times=c(0, 250, 500, 750, 1000, 1250))
+```
+
+
 
 ```{r}
 surv_tab <-
@@ -242,6 +250,99 @@ td %>%
   )
 
 ```
+
+
+# Competing risks
+
+```{r}
+mfit1 <- survfit(Surv(futime, death) ~ sex, data=mgus2)
+mfit1 %>% 
+  tidy() %>%
+  ggplot(aes(time, estimate, group = strata, colour = strata)) +
+  geom_line()
+```
+
+
+```{r}
+etime <- with(mgus2, ifelse(pstat==0, futime, ptime))
+event <- with(mgus2, ifelse(pstat==0, 2*death, 1))
+event <- factor(event, 0:2, labels=c("censor", "pcm", "death"))
+mfit2 <- survfit(Surv(etime, event) ~ sex, data=mgus2)
+mfit2 %>% 
+  tidy() %>%
+  ggplot(aes(time, estimate, group = state, colour = state)) +
+  geom_line() +
+  facet_wrap(~ strata)
+  
+```
+
+
+
+# Multi-state
+
+```{r}
+# multi-state
+fitCI <- survfit(Surv(stop, status * as.numeric(event), type = "mstate") ~ 1,
+              data = mgus1, subset = (start == 0))
+td_multi <- tidy(fitCI)
+td_multi
+```
+
+```{r}
+td_multi %>%
+  ggplot(aes(time, estimate, group = state, fill = state)) +
+    geom_line(aes(color = state)) +
+    geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = .25)
+```
+
+
+# Cox model
+
+```{r}
+cfit <- coxph(Surv(time, status) ~ age + sex, lung)
+
+tidy(cfit)
+
+tidy(cfit, exponentiate = TRUE)
+
+
+lp <- augment(cfit, lung)
+risks <- augment(cfit, lung, type.predict = "risk")
+expected <- augment(cfit, lung, type.predict = "expected")
+
+glance(cfit)
+
+
+# also works on clogit models
+resp <- levels(logan$occupation)
+n <- nrow(logan)
+indx <- rep(1:n, length(resp))
+logan2 <- data.frame(
+  logan[indx,],
+  id = indx,
+  tocc = factor(rep(resp, each=n))
+)
+
+logan2$case <- (logan2$occupation == logan2$tocc)
+
+cl <- clogit(case ~ tocc + tocc:education + strata(id), logan2)
+tidy(cl)
+
+glance(cl)
+
+
+ggplot(lp, aes(age, .fitted, color = sex)) +
+  geom_point()
+
+
+ggplot(risks, aes(age, .fitted, color = sex)) +
+  geom_point()
+
+
+ggplot(expected, aes(time, .fitted, color = sex)) +
+  geom_point()
+```
+
 
 
 # Further reading
