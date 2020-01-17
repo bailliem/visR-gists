@@ -1,0 +1,255 @@
+---
+title: "Example forest plots"
+description: |
+  Looking at different options to produce forest plots.
+author:
+  - name: Mark Baillie 
+    url: https://bailliem.github.io/visR-gists/
+    affiliation: visR
+    affiliation_url: https://github.com/openpharma/visR
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    self_contained: FALSE
+    toc: TRUE
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+```
+
+
+```{r setupR, results=FALSE, warning=FALSE}
+library(rmarkdown)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(here)
+library(patchwork)
+
+theme_set(theme_minimal(base_size = 8))
+#theme_set(theme_linedraw(base_size = 8))
+```
+
+
+# Purpose
+
+Use ggplot and patchwork to combine plot and table objects in to forest plots, meta-analysis, grables, etc. 
+
+
+# Layout
+
+A forest plot is a table with a visual component i.e. a dotplot with uncertainty displaying summary/aggregated statistics (e.g. mean and 95% CI, median and 2.5th and 97.5th percentile of a posterior distribution) per row. The table may be a colection of columns or nested columns displaying the label per row, summary statistics and inferential statistics. 
+
+See here for an example of layouts:
+
+* https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/layouttypes.html
+* https://cran.r-project.org/web/packages/RBesT/vignettes/customizing_plots.html
+* https://github.com/malcolmbarrett/tidymeta
+* http://rpkgs.datanovia.com/survminer/reference/ggforest.html
+
+Can have nested columns (block by treatment)
+Can have nexted rows (categories by factor or subgroup, study, etc. )
+
+Table is a coordinate system columns and rows which are cells. 
+Need to arrange / process data then have numbers or text then render as text or symbols. Text is symbols. Could do both.
+
+Render using ggplot, format tables, whatever is there
+
+What does our package handle. The transform step?
+
+Broom - tidy estimates? 
+
+Is this more than one package?
+Is this a wrapper only?
+
+
+# TODO / NOTES
+
+Check tidymeta which renders table and plot in ggplot
+https://github.com/malcolmbarrett/tidymeta
+
+gt may this option:
+
+* https://github.com/rstudio/gt/issues/152
+* https://community.rstudio.com/t/report-with-compound-values-and-charts-together/22518/15
+* https://github.com/rstudio/gt/pull/155
+
+
+
+https://cran.r-project.org/web/packages/meta/
+
+# Read data
+
+Data is a summary of medical history measured at *diagnosis*:
+
+* AFib 
+* MI
+* CHF
+* Diabetes 
+* Crohn's disease	
+
+
+```{r}
+crs <- read_csv(here("data","med_hist.csv"))
+```
+
+# Derive meta-data
+
+Calculate the number of patients.
+
+```{r}
+bigN <- nrow(crs)
+print(bigN)
+```
+
+# Aggregate
+
+Process steps:
+
+* Select comorbidities
+* Transform data frame from wide to long
+* Transform and spell out factors for plotting
+* Plot counts by comorbidity 
+
+TODO: Change dataset examples. 
+
+```{r}
+a_crs <- 
+  crs %>%
+  select(id, chf, afib, diabetes, mi, copd, crohn, ulcercol, ibd) %>%
+  pivot_longer(-id, names_to = "comorb", values_to = "value") %>%
+  mutate(
+    comorb = case_when(
+      comorb == "chf" ~ "Congestive heart failure",
+      comorb == "afib" ~ "Atrial fibrillation",
+      comorb == "diabetes" ~ "Diabetes",
+      comorb == "copd" ~ "COPD",
+      comorb == "mi" ~ "Myocardial infarction",
+      comorb == "crohn" ~ "Crohn's disease",
+      comorb == "ulcercol" ~ "Ulcerative colitis",
+      comorb == "ibd" ~ "Inflammatory bowel disease"
+    ),
+    value = case_when(value == "0" ~ "no",
+                      value == "1" ~ "yes")
+  ) %>%
+  group_by(comorb, value) %>%
+  summarise(n = n()) %>%
+  mutate(
+    inc = n / bigN,
+    perc = n / bigN * 100,
+    plot_lab = paste0('(', n, ', ', round(perc, digits = 1), '%)'),
+    axis_lab = paste0(value, ' ', '(', n, ', ', round(perc, digits = 1), '%)')
+  ) 
+```
+
+
+# Plot table
+
+Create two example table columns. 
+
+```{r}
+
+col_1 <- 
+  a_crs %>%
+  filter(value == "yes") %>%
+  ggplot(aes(reorder(axis_lab, inc), 1, label = comorb), hjust = 0) +
+  geom_text() +
+  coord_flip() +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+
+
+
+col_1
+```
+
+
+
+```{r}
+col_2 <- 
+  a_crs %>%
+  filter(value == "yes") %>%
+  ggplot(aes(reorder(axis_lab, inc), 1, label = axis_lab), hjust = 0) +
+  geom_text() +
+  coord_flip() +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+
+col_2
+```
+
+# Plot numbers
+
+
+This is an example of a dot plot with uncertainty. 
+
+```{r}
+col_3 <- 
+  a_crs %>%
+  filter(value == "yes") %>%
+  ggplot(aes(reorder(axis_lab, inc), inc)) +
+  geom_point() + 
+  geom_linerange(aes(ymin = inc - 0.1, ymax = inc + 0.1), alpha = 0.2) +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank()
+  ) +
+  ylab("Measurement [units]")
+
+col_3
+```
+
+
+
+# Combine using patchwork
+
+This is messy but illustrates this can be achieved. 
+
+We are combining columns to form a dummy forest plot. 
+
+```{r}
+plot <- col_1 + col_2 + col_3
+plot
+```
+
+Using this approach, will rows always been aligned?
+
+
+Annotated version 
+```{r}
+
+plot + plot_annotation(
+  title = 'Forest plot',
+  subtitle = '3 plots combined into one',
+  caption = 'Source data is from XYZ.'
+)
+
+```
+
+
+# Session info
+
+
+```{r}
+sessionInfo()
+```
+
+# To read 
+https://www.littlemissdata.com/blog/prettytables
+https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/layouttypes.html
+

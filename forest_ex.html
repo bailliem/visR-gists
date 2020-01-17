@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+  <!--radix_placeholder_meta_tags-->
+  <title>Example forest plots</title>
+  
+  <meta property="description" itemprop="description" content="Looking at different options to produce forest plots."/>
+  
+  
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2020-01-17"/>
+  <meta property="article:created" itemprop="dateCreated" content="2020-01-17"/>
+  <meta name="article:author" content="Mark Baillie"/>
+  
+  <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+  <meta property="og:title" content="Example forest plots"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Looking at different options to produce forest plots."/>
+  <meta property="og:locale" content="en_US"/>
+  
+  <!--  https://dev.twitter.com/cards/types/summary -->
+  <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:title" content="Example forest plots"/>
+  <meta property="twitter:description" content="Looking at different options to produce forest plots."/>
+  
+  <!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-rmarkdown-metadata">
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Example forest plots"]},{"type":"character","attributes":{},"value":["Looking at different options to produce forest plots.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url","affiliation","affiliation_url"]}},"value":[{"type":"character","attributes":{},"value":["Mark Baillie"]},{"type":"character","attributes":{},"value":["https://bailliem.github.io/visR-gists/"]},{"type":"character","attributes":{},"value":["visR"]},{"type":"character","attributes":{},"value":["https://github.com/openpharma/visR"]}]}]},{"type":"character","attributes":{},"value":["2020-01-17"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  </script>
+  <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["data/med_hist.csv","forest_ex_files/figure-html5/unnamed-chunk-4-1.png","forest_ex_files/figure-html5/unnamed-chunk-5-1.png","forest_ex_files/figure-html5/unnamed-chunk-6-1.png","forest_ex_files/figure-html5/unnamed-chunk-7-1.png","forest_ex_files/figure-html5/unnamed-chunk-8-1.png","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/jquery-1.11.3/jquery.min.js","index_files/webcomponents-2.0.0/webcomponents.js","index.html","LICENSE","notebooks/attrition.html","notebooks/attrition.Rmd","notebooks/broom_models_mixed.Rmd","notebooks/broom_models.Rmd","notebooks/dynamite_revise.Rmd","notebooks/facet_barchart.Rmd","notebooks/forest_plot.Rmd","notebooks/format_tables.Rmd","notebooks/ida_plots.Rmd","notebooks/plot_lin_models.Rmd","notebooks/senn_sim.R","notebooks/survival_plots.html","notebooks/survival_plots.Rmd","notebooks/tidy_bayes_files/figure-html/unnamed-chunk-3-1.png","notebooks/tidy_bayes.Rmd","notebooks/timeseries.html","notebooks/timeseries.Rmd","notebooks/tmp_dumbbell.Rmd","notebooks/tmp_gt_test.R","notebooks/tmp_spark.R","notebooks/tmp_tibble.R","notebooks/varsel_plots.Rmd","outcome_purpose.html","R/matt_surv_risk.R","surv_ex_files/bowser-1.9.3/bowser.min.js","surv_ex_files/distill-2.2.21/template.v2.js","surv_ex_files/figure-html5/unnamed-chunk-12-1.png","surv_ex_files/figure-html5/unnamed-chunk-13-1.png","surv_ex_files/figure-html5/unnamed-chunk-14-1.png","surv_ex_files/figure-html5/unnamed-chunk-15-1.png","surv_ex_files/figure-html5/unnamed-chunk-16-1.png","surv_ex_files/figure-html5/unnamed-chunk-17-1.png","surv_ex_files/figure-html5/unnamed-chunk-18-1.png","surv_ex_files/figure-html5/unnamed-chunk-19-1.png","surv_ex_files/figure-html5/unnamed-chunk-2-1.png","surv_ex_files/figure-html5/unnamed-chunk-20-1.png","surv_ex_files/figure-html5/unnamed-chunk-21-1.png","surv_ex_files/figure-html5/unnamed-chunk-22-1.png","surv_ex_files/figure-html5/unnamed-chunk-23-1.png","surv_ex_files/figure-html5/unnamed-chunk-23-2.png","surv_ex_files/figure-html5/unnamed-chunk-23-3.png","surv_ex_files/figure-html5/unnamed-chunk-24-1.png","surv_ex_files/figure-html5/unnamed-chunk-25-1.png","surv_ex_files/figure-html5/unnamed-chunk-25-2.png","surv_ex_files/figure-html5/unnamed-chunk-25-3.png","surv_ex_files/figure-html5/unnamed-chunk-3-1.png","surv_ex_files/figure-html5/unnamed-chunk-4-1.png","surv_ex_files/figure-html5/unnamed-chunk-6-1.png","surv_ex_files/figure-html5/unnamed-chunk-7-1.png","surv_ex_files/figure-html5/unnamed-chunk-8-1.png","surv_ex_files/jquery-1.11.3/jquery.min.js","surv_ex_files/webcomponents-2.0.0/webcomponents.js","surv_ex.html"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+  <!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+  
+  <style type="text/css">
+  
+  body {
+    background-color: white;
+  }
+  
+  .pandoc-table {
+    width: 100%;
+  }
+  
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
+  
+  .pandoc-table th:not([align]) {
+    text-align: left;
+  }
+  
+  .pagedtable-footer {
+    font-size: 15px;
+  }
+  
+  .html-widget {
+    margin-bottom: 2.0em;
+  }
+  
+  .l-screen-inset {
+    padding-right: 16px;
+  }
+  
+  .l-screen .caption {
+    margin-left: 10px;
+  }
+  
+  .shaded {
+    background: rgb(247, 247, 247);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .shaded .html-widget {
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .shaded .shaded-content {
+    background: white;
+  }
+  
+  .text-output {
+    margin-top: 0;
+    line-height: 1.5em;
+  }
+  
+  .hidden {
+    display: none !important;
+  }
+  
+  d-article {
+    padding-bottom: 30px;
+  }
+  
+  d-appendix {
+    padding-top: 30px;
+  }
+  
+  d-article>p>img {
+    width: 100%;
+  }
+  
+  d-article iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.0em;
+    width: 100%;
+  }
+  
+  figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+  
+  /* CSS for table of contents */
+  
+  .d-toc {
+    color: rgba(0,0,0,0.8);
+    font-size: 0.8em;
+    line-height: 1em;
+  }
+  
+  .d-toc-header {
+    font-size: 0.6rem;
+    font-weight: 400;
+    color: rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 1.3em;
+  }
+  
+  .d-toc a {
+    border-bottom: none;
+  }
+  
+  .d-toc ul {
+    padding-left: 0;
+  }
+  
+  .d-toc li>ul {
+    padding-top: 0.8em;
+    padding-left: 16px;
+    margin-bottom: 0.6em;
+  }
+  
+  .d-toc ul,
+  .d-toc li {
+    list-style-type: none;
+  }
+  
+  .d-toc li {
+    margin-bottom: 0.9em;
+  }
+  
+  .d-toc-separator {
+    margin-top: 20px;
+    margin-bottom: 2em;
+  }
+  
+  .d-article-with-toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  
+  
+  
+  /* Tweak code blocks (note that this CSS is repeated above in an injection
+     into the d-code shadow dom) */
+  
+  d-code {
+    overflow-x: auto !important;
+  }
+  
+  pre.d-code code.d-code {
+    padding-left: 10px;
+    font-size: 12px;
+    border-left: 2px solid rgba(0,0,0,0.1);
+  }
+  
+  pre.text-output {
+  
+    font-size: 12px;
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+  
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+  
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+  
+  @media(min-width: 768px) {
+  
+  d-code {
+    overflow-x: visible !important;
+  }
+  
+  pre.d-code code.d-code  {
+      padding-left: 18px;
+      font-size: 14px;
+  }
+  pre.text-output {
+    font-size: 14px;
+  }
+  }
+  
+  /* Figure */
+  
+  .figure {
+    position: relative;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+  }
+  
+  .figure img {
+    width: 100%;
+  }
+  
+  .figure .caption {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+  
+  .figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+  
+  .figure .caption a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .figure .caption b,
+  .figure .caption strong, {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 1.0);
+  }
+  
+  
+  
+  /* Tweak 1000px media break to show more text */
+  
+  @media(min-width: 1000px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 16px;
+    }
+  
+    .grid {
+      grid-column-gap: 16px;
+    }
+  
+    d-article {
+      font-size: 1.06rem;
+      line-height: 1.7em;
+    }
+    figure .caption, .figure .caption, figure figcaption {
+      font-size: 13px;
+    }
+  }
+  
+  @media(min-width: 1180px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 32px;
+    }
+  
+    .grid {
+      grid-column-gap: 32px;
+    }
+  }
+  
+  
+  /* Get the citation styles for the appendix (not auto-injected on render since
+     we do our own rendering of the citation appendix) */
+  
+  d-appendix .citation-appendix,
+  .d-appendix .citation-appendix {
+    font-size: 11px;
+    line-height: 15px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 18px;
+    border-radius: 3px;
+    color: rgba(150, 150, 150, 1);
+    overflow: hidden;
+    margin-top: -12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  
+  
+  /* Social footer */
+  
+  .social_footer {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.67);
+  }
+  
+  .disqus-comments {
+    margin-right: 30px;
+  }
+  
+  .disqus-comment-count {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+  
+  #disqus_thread {
+    margin-top: 30px;
+  }
+  
+  .article-sharing a {
+    border-bottom: none;
+    margin-right: 8px;
+  }
+  
+  .article-sharing a:hover {
+    border-bottom: none;
+  }
+  
+  .sidebar-section.subscribe {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+  
+  .subscribe p {
+    margin-bottom: 0.5em;
+  }
+  
+  
+  .article-footer .subscribe {
+    font-size: 15px;
+    margin-top: 45px;
+  }
+  
+  
+  /* Improve display for browsers without grid (IE/Edge <= 15) */
+  
+  .downlevel {
+    line-height: 1.6em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+  }
+  
+  .downlevel .d-title {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .downlevel .d-title h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+    margin: 0 0 0.5rem;
+  }
+  
+  .downlevel .d-title p {
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.55em;
+    margin-top: 0;
+  }
+  
+  .downlevel .d-byline {
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    font-size: 0.8rem;
+    line-height: 1.8em;
+  }
+  
+  .downlevel .section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .downlevel .d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+  
+  
+  .downlevel .d-appendix {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.5);
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+  
+  .downlevel .footnotes ol {
+    padding-left: 13px;
+  }
+  
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  
+  @media(min-width: 768px) {
+    .downlevel .base-grid,
+    .downlevel .distill-header,
+    .downlevel .d-title,
+    .downlevel .d-abstract,
+    .downlevel .d-article,
+    .downlevel .d-appendix,
+    .downlevel .distill-appendix,
+    .downlevel .d-byline,
+    .downlevel .d-footnote-list,
+    .downlevel .d-citation-list,
+    .downlevel .distill-footer,
+    .downlevel .appendix-bottom,
+    .downlevel .posts-container {
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 900px;
+  }
+  }
+  
+  .downlevel pre code {
+    display: block;
+    border-left: 2px solid rgba(0, 0, 0, .1);
+    padding: 0 0 0 20px;
+    font-size: 14px;
+  }
+  
+  .downlevel code, .downlevel pre {
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+  
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+  
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+  
+  </style>
+  
+  <script type="application/javascript">
+  
+  function is_downlevel_browser() {
+    if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                   window.navigator.userAgent)) {
+      return true;
+    } else {
+      return window.load_distill_framework === undefined;
+    }
+  }
+  
+  // show body when load is complete
+  function on_load_complete() {
+  
+    // set body to visible
+    document.body.style.visibility = 'visible';
+  
+    // force redraw for leaflet widgets
+    if (window.HTMLWidgets) {
+      var maps = window.HTMLWidgets.findAll(".leaflet");
+      $.each(maps, function(i, el) {
+        var map = this.getMap();
+        map.invalidateSize();
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.TileLayer)
+            layer.redraw();
+        });
+      });
+    }
+  
+    // trigger 'shown' so htmlwidgets resize
+    $('d-article').trigger('shown');
+  }
+  
+  function init_distill() {
+  
+    init_common();
+  
+    // create front matter
+    var front_matter = $('<d-front-matter></d-front-matter>');
+    $('#distill-front-matter').wrap(front_matter);
+  
+    // create d-title
+    $('.d-title').changeElementType('d-title');
+  
+    // create d-byline
+    var byline = $('<d-byline></d-byline>');
+    $('.d-byline').replaceWith(byline);
+  
+    // create d-article
+    var article = $('<d-article></d-article>');
+    $('.d-article').wrap(article).children().unwrap();
+  
+    // move posts container into article
+    $('.posts-container').appendTo($('d-article'));
+  
+    // create d-appendix
+    $('.d-appendix').changeElementType('d-appendix');
+  
+    // create d-bibliography
+    var bibliography = $('<d-bibliography></d-bibliography>');
+    $('#distill-bibliography').wrap(bibliography);
+  
+    // flag indicating that we have appendix items
+    var appendix = $('.appendix-bottom').children('h3').length > 0;
+  
+    // replace citations with <d-cite>
+    $('.citation').each(function(i, val) {
+      appendix = true;
+      var cites = $(this).attr('data-cites').split(" ");
+      var dt_cite = $('<d-cite></d-cite>');
+      dt_cite.attr('key', cites.join());
+      $(this).replaceWith(dt_cite);
+    });
+    // remove refs
+    $('#refs').remove();
+  
+    // replace footnotes with <d-footnote>
+    $('.footnote-ref').each(function(i, val) {
+      appendix = true;
+      var href = $(this).attr('href');
+      var id = href.replace('#', '');
+      var fn = $('#' + id);
+      var fn_p = $('#' + id + '>p');
+      fn_p.find('.footnote-back').remove();
+      var text = fn_p.html();
+      var dtfn = $('<d-footnote></d-footnote>');
+      dtfn.html(text);
+      $(this).replaceWith(dtfn);
+    });
+    // remove footnotes
+    $('.footnotes').remove();
+  
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      var id = $(this).attr('id');
+      $('.d-toc a[href="#' + id + '"]').parent().remove();
+      appendix = true;
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+    });
+  
+    // show d-appendix if we have appendix content
+    $("d-appendix").css('display', appendix ? 'grid' : 'none');
+  
+    // replace code blocks with d-code
+    $('pre>code').each(function(i, val) {
+      var code = $(this);
+      var pre = code.parent();
+      var clz = "";
+      var language = pre.attr('class');
+      if (language) {
+        // map unknown languages to "clike" (without this they just dissapear)
+        if ($.inArray(language, ["bash", "clike", "css", "go", "html",
+                                 "javascript", "js", "julia", "lua", "markdown",
+                                 "markup", "mathml", "python", "svg", "xml"]) == -1)
+          language = "clike";
+        language = ' language="' + language + '"';
+        var dt_code = $('<d-code block' + language + clz + '></d-code>');
+        dt_code.text(code.text());
+        pre.replaceWith(dt_code);
+      } else {
+        code.addClass('text-output').unwrap().changeElementType('pre');
+      }
+    });
+  
+    // localize layout chunks to just output
+    $('.layout-chunk').each(function(i, val) {
+  
+      // capture layout
+      var layout = $(this).attr('data-layout');
+  
+      // apply layout to markdown level block elements
+      var elements = $(this).children().not('d-code, pre.text-output, script');
+      elements.each(function(i, el) {
+        var layout_div = $('<div class="' + layout + '"></div>');
+        if (layout_div.hasClass('shaded')) {
+          var shaded_content = $('<div class="shaded-content"></div>');
+          $(this).wrap(shaded_content);
+          $(this).parent().wrap(layout_div);
+        } else {
+          $(this).wrap(layout_div);
+        }
+      });
+  
+  
+      // unwrap the layout-chunk div
+      $(this).children().unwrap();
+    });
+  
+    // load distill framework
+    load_distill_framework();
+  
+    // wait for window.distillRunlevel == 4 to do post processing
+    function distill_post_process() {
+  
+      if (!window.distillRunlevel || window.distillRunlevel < 4)
+        return;
+  
+      // hide author/affiliations entirely if we have no authors
+      var front_matter = JSON.parse($("#distill-front-matter").html());
+      var have_authors = front_matter.authors && front_matter.authors.length > 0;
+      if (!have_authors)
+        $('d-byline').addClass('hidden');
+  
+      // table of contents
+      if (have_authors) // adjust border if we are in authors
+        $('.d-toc').parent().addClass('d-article-with-toc');
+  
+      // strip links that point to #
+      $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+  
+      // hide elements of author/affiliations grid that have no value
+      function hide_byline_column(caption) {
+        $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+      }
+  
+      // affiliations
+      var have_affiliations = false;
+      for (var i = 0; i<front_matter.authors.length; ++i) {
+        var author = front_matter.authors[i];
+        if (author.affiliation !== "&nbsp;") {
+          have_affiliations = true;
+          break;
+        }
+      }
+      if (!have_affiliations)
+        $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+  
+      // published date
+      if (!front_matter.publishedDate)
+        hide_byline_column("Published");
+  
+      // document object identifier
+      var doi = $('d-byline').find('h3:contains("DOI")');
+      var doi_p = doi.next().empty();
+      if (!front_matter.doi) {
+        // if we have a citation and valid citationText then link to that
+        if ($('#citation').length > 0 && front_matter.citationText) {
+          doi.html('Citation');
+          $('<a href="#citation"></a>')
+            .text(front_matter.citationText)
+            .appendTo(doi_p);
+        } else {
+          hide_byline_column("DOI");
+        }
+      } else {
+        $('<a></a>')
+           .attr('href', "https://doi.org/" + front_matter.doi)
+           .html(front_matter.doi)
+           .appendTo(doi_p);
+      }
+  
+       // change plural form of authors/affiliations
+      if (front_matter.authors.length === 1) {
+        var grid = $('.authors-affiliations');
+        grid.children('h3:contains("Authors")').text('Author');
+        grid.children('h3:contains("Affiliations")').text('Affiliation');
+      }
+  
+      // inject pre code styles (can't do this with a global stylesheet b/c a shadow root is used)
+      $('d-code').each(function(i, val) {
+        var style = document.createElement('style');
+        style.innerHTML = 'pre code { padding-left: 10px; font-size: 12px; border-left: 2px solid rgba(0,0,0,0.1); } ' +
+                          '@media(min-width: 768px) { pre code { padding-left: 18px; font-size: 14px; } }';
+        if (this.shadowRoot)
+          this.shadowRoot.appendChild(style);
+      });
+  
+      // move appendix-bottom entries to the bottom
+      $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+      $('.appendix-bottom').remove();
+  
+      // clear polling timer
+      clearInterval(tid);
+  
+      // show body now that everything is ready
+      on_load_complete();
+    }
+  
+    var tid = setInterval(distill_post_process, 50);
+    distill_post_process();
+  
+  }
+  
+  function init_downlevel() {
+  
+    init_common();
+  
+     // insert hr after d-title
+    $('.d-title').after($('<hr class="section-separator"/>'));
+  
+    // check if we have authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+  
+    // manage byline/border
+    if (!have_authors)
+      $('.d-byline').remove();
+    $('.d-byline').after($('<hr class="section-separator"/>'));
+    $('.d-byline a').remove();
+  
+    // remove toc
+    $('.d-toc-header').remove();
+    $('.d-toc').remove();
+    $('.d-toc-separator').remove();
+  
+    // move appendix elements
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+    });
+  
+  
+    // inject headers into references and footnotes
+    var refs_header = $('<h3></h3>');
+    refs_header.text('References');
+    $('#refs').prepend(refs_header);
+  
+    var footnotes_header = $('<h3></h3');
+    footnotes_header.text('Footnotes');
+    $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+  
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+  
+    // remove appendix if it's empty
+    if ($('.d-appendix').children().length === 0)
+      $('.d-appendix').remove();
+  
+    // prepend separator above appendix
+    $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+  
+    // trim code
+    $('pre>code').each(function(i, val) {
+      $(this).html($.trim($(this).html()));
+    });
+  
+    // move posts-container right before article
+    $('.posts-container').insertBefore($('.d-article'));
+  
+    $('body').addClass('downlevel');
+  
+    on_load_complete();
+  }
+  
+  
+  function init_common() {
+  
+    // jquery plugin to change element types
+    (function($) {
+      $.fn.changeElementType = function(newType) {
+        var attrs = {};
+  
+        $.each(this[0].attributes, function(idx, attr) {
+          attrs[attr.nodeName] = attr.nodeValue;
+        });
+  
+        this.replaceWith(function() {
+          return $("<" + newType + "/>", attrs).append($(this).contents());
+        });
+      };
+    })(jQuery);
+  
+    // prevent underline for linked images
+    $('a > img').parent().css({'border-bottom' : 'none'});
+  
+    // mark non-body figures created by knitr chunks as 100% width
+    $('.layout-chunk').each(function(i, val) {
+      var figures = $(this).find('img, .html-widget');
+      if ($(this).attr('data-layout') !== "l-body") {
+        figures.css('width', '100%');
+      } else {
+        figures.css('max-width', '100%');
+        figures.filter("[width]").each(function(i, val) {
+          var fig = $(this);
+          fig.css('width', fig.attr('width') + 'px');
+        });
+  
+      }
+    });
+  
+    // auto-append index.html to post-preview links in file: protocol
+    // and in rstudio ide preview
+    $('.post-preview').each(function(i, val) {
+      if (window.location.protocol === "file:")
+        $(this).attr('href', $(this).attr('href') + "index.html");
+    });
+  
+    // get rid of index.html references in header
+    if (window.location.protocol !== "file:") {
+      $('.distill-site-header a[href]').each(function(i,val) {
+        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+      });
+    }
+  
+    // add class to pandoc style tables
+    $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+    $('.kable-table').children('table').addClass('pandoc-table');
+  
+    // add figcaption style to table captions
+    $('caption').parent('table').addClass("figcaption");
+  
+    // initialize posts list
+    if (window.init_posts_list)
+      window.init_posts_list();
+  
+    // implmement disqus comment link
+    $('.disqus-comment-count').click(function() {
+      window.headroom_prevent_pin = true;
+      $('#disqus_thread').toggleClass('hidden');
+      if (!$('#disqus_thread').hasClass('hidden')) {
+        var offset = $(this).offset();
+        $(window).resize();
+        $('html, body').animate({
+          scrollTop: offset.top - 35
+        });
+      }
+    });
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    if (is_downlevel_browser())
+      init_downlevel();
+    else
+      window.addEventListener('WebComponentsReady', init_distill);
+  });
+  
+  </script>
+  
+  <!--/radix_placeholder_distill-->
+  <script src="forest_ex_files/jquery-1.11.3/jquery.min.js"></script>
+  <script src="forest_ex_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="forest_ex_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="forest_ex_files/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+  <!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Example forest plots","description":"Looking at different options to produce forest plots.","authors":[{"author":"Mark Baillie","authorURL":"https://bailliem.github.io/visR-gists/","affiliation":"visR","affiliationURL":"https://github.com/openpharma/visR"}],"publishedDate":"2020-01-17T00:00:00.000+00:00","citationText":"Baillie, 2020"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Example forest plots</h1>
+<p>Looking at different options to produce forest plots.</p>
+</div>
+
+<div class="d-byline">
+  Mark Baillie <a href="https://bailliem.github.io/visR-gists/" class="uri">https://bailliem.github.io/visR-gists/</a> (visR)<a href="https://github.com/openpharma/visR" class="uri">https://github.com/openpharma/visR</a>
+  
+<br/>2020-01-17
+</div>
+
+<div class="d-article">
+<h3 class="d-toc-header">Table of Contents</h3>
+<nav class="d-toc" id="TOC">
+<ul>
+<li><a href="#purpose">Purpose</a></li>
+<li><a href="#layout">Layout</a></li>
+<li><a href="#todo-notes">TODO / NOTES</a></li>
+<li><a href="#read-data">Read data</a></li>
+<li><a href="#derive-meta-data">Derive meta-data</a></li>
+<li><a href="#aggregate">Aggregate</a></li>
+<li><a href="#plot-table">Plot table</a></li>
+<li><a href="#plot-numbers">Plot numbers</a></li>
+<li><a href="#combine-using-patchwork">Combine using patchwork</a></li>
+<li><a href="#session-info">Session info</a></li>
+<li><a href="#to-read">To read</a></li>
+</ul>
+</nav>
+<hr class="d-toc-separator"/>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+library(rmarkdown)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(here)
+library(patchwork)
+
+theme_set(theme_minimal(base_size = 8))
+#theme_set(theme_linedraw(base_size = 8))</code></pre>
+</div>
+<h1 id="purpose">Purpose</h1>
+<p>Use ggplot and patchwork to combine plot and table objects in to forest plots, meta-analysis, grables, etc.</p>
+<h1 id="layout">Layout</h1>
+<p>A forest plot is a table with a visual component i.e. a dotplot with uncertainty displaying summary/aggregated statistics (e.g. mean and 95% CI, median and 2.5th and 97.5th percentile of a posterior distribution) per row. The table may be a colection of columns or nested columns displaying the label per row, summary statistics and inferential statistics.</p>
+<p>See here for an example of layouts:</p>
+<ul>
+<li><a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/layouttypes.html" class="uri">https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/layouttypes.html</a></li>
+<li><a href="https://cran.r-project.org/web/packages/RBesT/vignettes/customizing_plots.html" class="uri">https://cran.r-project.org/web/packages/RBesT/vignettes/customizing_plots.html</a></li>
+<li><a href="https://github.com/malcolmbarrett/tidymeta" class="uri">https://github.com/malcolmbarrett/tidymeta</a></li>
+<li><a href="http://rpkgs.datanovia.com/survminer/reference/ggforest.html" class="uri">http://rpkgs.datanovia.com/survminer/reference/ggforest.html</a></li>
+</ul>
+<p>Can have nested columns (block by treatment) Can have nexted rows (categories by factor or subgroup, study, etc. )</p>
+<p>Table is a coordinate system columns and rows which are cells. Need to arrange / process data then have numbers or text then render as text or symbols. Text is symbols. Could do both.</p>
+<p>Render using ggplot, format tables, whatever is there</p>
+<p>What does our package handle. The transform step?</p>
+<p>Broom - tidy estimates?</p>
+<p>Is this more than one package? Is this a wrapper only?</p>
+<h1 id="todo-notes">TODO / NOTES</h1>
+<p>Check tidymeta which renders table and plot in ggplot <a href="https://github.com/malcolmbarrett/tidymeta" class="uri">https://github.com/malcolmbarrett/tidymeta</a></p>
+<p>gt may this option:</p>
+<ul>
+<li><a href="https://github.com/rstudio/gt/issues/152" class="uri">https://github.com/rstudio/gt/issues/152</a></li>
+<li><a href="https://community.rstudio.com/t/report-with-compound-values-and-charts-together/22518/15" class="uri">https://community.rstudio.com/t/report-with-compound-values-and-charts-together/22518/15</a></li>
+<li><a href="https://github.com/rstudio/gt/pull/155" class="uri">https://github.com/rstudio/gt/pull/155</a></li>
+</ul>
+<p><a href="https://cran.r-project.org/web/packages/meta/" class="uri">https://cran.r-project.org/web/packages/meta/</a></p>
+<h1 id="read-data">Read data</h1>
+<p>Data is a summary of medical history measured at <em>diagnosis</em>:</p>
+<ul>
+<li>AFib</li>
+<li>MI</li>
+<li>CHF</li>
+<li>Diabetes</li>
+<li>Crohn’s disease</li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+crs &lt;- read_csv(here(&quot;data&quot;,&quot;med_hist.csv&quot;))</code></pre>
+</div>
+<h1 id="derive-meta-data">Derive meta-data</h1>
+<p>Calculate the number of patients.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+bigN &lt;- nrow(crs)
+print(bigN)</code></pre>
+<pre><code>
+[1] 345</code></pre>
+</div>
+<h1 id="aggregate">Aggregate</h1>
+<p>Process steps:</p>
+<ul>
+<li>Select comorbidities</li>
+<li>Transform data frame from wide to long</li>
+<li>Transform and spell out factors for plotting</li>
+<li>Plot counts by comorbidity</li>
+</ul>
+<p>TODO: Change dataset examples.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+a_crs &lt;- 
+  crs %&gt;%
+  select(id, chf, afib, diabetes, mi, copd, crohn, ulcercol, ibd) %&gt;%
+  pivot_longer(-id, names_to = &quot;comorb&quot;, values_to = &quot;value&quot;) %&gt;%
+  mutate(
+    comorb = case_when(
+      comorb == &quot;chf&quot; ~ &quot;Congestive heart failure&quot;,
+      comorb == &quot;afib&quot; ~ &quot;Atrial fibrillation&quot;,
+      comorb == &quot;diabetes&quot; ~ &quot;Diabetes&quot;,
+      comorb == &quot;copd&quot; ~ &quot;COPD&quot;,
+      comorb == &quot;mi&quot; ~ &quot;Myocardial infarction&quot;,
+      comorb == &quot;crohn&quot; ~ &quot;Crohn&#39;s disease&quot;,
+      comorb == &quot;ulcercol&quot; ~ &quot;Ulcerative colitis&quot;,
+      comorb == &quot;ibd&quot; ~ &quot;Inflammatory bowel disease&quot;
+    ),
+    value = case_when(value == &quot;0&quot; ~ &quot;no&quot;,
+                      value == &quot;1&quot; ~ &quot;yes&quot;)
+  ) %&gt;%
+  group_by(comorb, value) %&gt;%
+  summarise(n = n()) %&gt;%
+  mutate(
+    inc = n / bigN,
+    perc = n / bigN * 100,
+    plot_lab = paste0(&#39;(&#39;, n, &#39;, &#39;, round(perc, digits = 1), &#39;%)&#39;),
+    axis_lab = paste0(value, &#39; &#39;, &#39;(&#39;, n, &#39;, &#39;, round(perc, digits = 1), &#39;%)&#39;)
+  ) </code></pre>
+</div>
+<h1 id="plot-table">Plot table</h1>
+<p>Create two example table columns.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+col_1 &lt;- 
+  a_crs %&gt;%
+  filter(value == &quot;yes&quot;) %&gt;%
+  ggplot(aes(reorder(axis_lab, inc), 1, label = comorb), hjust = 0) +
+  geom_text() +
+  coord_flip() +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+
+
+
+col_1</code></pre>
+<p><img src="forest_ex_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+col_2 &lt;- 
+  a_crs %&gt;%
+  filter(value == &quot;yes&quot;) %&gt;%
+  ggplot(aes(reorder(axis_lab, inc), 1, label = axis_lab), hjust = 0) +
+  geom_text() +
+  coord_flip() +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_blank(),
+    axis.title = element_blank(),
+    axis.text = element_blank()
+  )
+
+col_2</code></pre>
+<p><img src="forest_ex_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+</div>
+<h1 id="plot-numbers">Plot numbers</h1>
+<p>This is an example of a dot plot with uncertainty.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+col_3 &lt;- 
+  a_crs %&gt;%
+  filter(value == &quot;yes&quot;) %&gt;%
+  ggplot(aes(reorder(axis_lab, inc), inc)) +
+  geom_point() + 
+  geom_linerange(aes(ymin = inc - 0.1, ymax = inc + 0.1), alpha = 0.2) +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank()
+  ) +
+  ylab(&quot;Measurement [units]&quot;)
+
+col_3</code></pre>
+<p><img src="forest_ex_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+</div>
+<h1 id="combine-using-patchwork">Combine using patchwork</h1>
+<p>This is messy but illustrates this can be achieved.</p>
+<p>We are combining columns to form a dummy forest plot.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+plot &lt;- col_1 + col_2 + col_3
+plot</code></pre>
+<p><img src="forest_ex_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
+</div>
+<p>Using this approach, will rows always been aligned?</p>
+Annotated version
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+plot + plot_annotation(
+  title = &#39;Forest plot&#39;,
+  subtitle = &#39;3 plots combined into one&#39;,
+  caption = &#39;Source data is from XYZ.&#39;
+)</code></pre>
+<p><img src="forest_ex_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+</div>
+<h1 id="session-info">Session info</h1>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+sessionInfo()</code></pre>
+<pre><code>
+R version 3.6.0 (2019-04-26)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 16.04.6 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/atlas-base/atlas/libblas.so.3.0
+LAPACK: /usr/lib/atlas-base/atlas/liblapack.so.3.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C          
+ [3] LC_TIME=C.UTF-8        LC_COLLATE=C.UTF-8    
+ [5] LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C             
+ [9] LC_ADDRESS=C           LC_TELEPHONE=C        
+[11] LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+
+other attached packages:
+[1] patchwork_1.0.0 here_0.1        readr_1.3.1     tidyr_1.0.0    
+[5] dplyr_0.8.3     ggplot2_3.2.1   rmarkdown_2.0  
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.3       pillar_1.4.3     compiler_3.6.0  
+ [4] tools_3.6.0      zeallot_0.1.0    digest_0.6.23   
+ [7] evaluate_0.14    lifecycle_0.1.0  tibble_2.1.3    
+[10] gtable_0.3.0     pkgconfig_2.0.3  rlang_0.4.2     
+[13] distill_0.7      yaml_2.2.0       xfun_0.12       
+[16] withr_2.1.2      stringr_1.4.0    knitr_1.26      
+[19] hms_0.5.3        vctrs_0.2.1      rprojroot_1.3-2 
+[22] grid_3.6.0       tidyselect_0.2.5 glue_1.3.1      
+[25] R6_2.4.1         farver_2.0.2     purrr_0.3.3     
+[28] magrittr_1.5     scales_1.1.0     backports_1.1.5 
+[31] htmltools_0.4.0  assertthat_0.2.1 colorspace_1.4-1
+[34] labeling_0.3     stringi_1.4.5    lazyeval_0.2.2  
+[37] munsell_0.5.0    crayon_1.3.4    </code></pre>
+</div>
+<h1 id="to-read">To read</h1>
+<p><a href="https://www.littlemissdata.com/blog/prettytables" class="uri">https://www.littlemissdata.com/blog/prettytables</a> <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/layouttypes.html" class="uri">https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/layouttypes.html</a></p>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom"></div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>
